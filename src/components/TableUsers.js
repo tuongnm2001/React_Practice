@@ -58,25 +58,27 @@ const TableUsers = () => {
                 </Table>
             </div>
 
-            <ReactPaginate
-                breakLabel="..."
-                nextLabel="Next >>"
-                onPageChange={handlePageClick}
-                pageRangeDisplayed={5}
-                pageCount={totalPages}
-                previousLabel="<< Previous"
+            <div className='paginate'>
+                <ReactPaginate
+                    breakLabel="..."
+                    nextLabel="Next >>"
+                    onPageChange={handlePageClick}
+                    pageRangeDisplayed={5}
+                    pageCount={totalPages}
+                    previousLabel="<< Previous"
 
-                pageClassName='page-item'
-                pageLinkClassName='page-link'
-                previousClassName='page-item'
-                previousLinkClassName='page-link'
-                nextClassName='page-item'
-                nextLinkClassName='page-link'
-                breakClassName='page-item'
-                breakLinkClassName='page-link'
-                containerClassName='pagination'
-                activeClassName='active'
-            />
+                    pageClassName='page-item'
+                    pageLinkClassName='page-link'
+                    previousClassName='page-item'
+                    previousLinkClassName='page-link'
+                    nextClassName='page-item'
+                    nextLinkClassName='page-link'
+                    breakClassName='page-item'
+                    breakLinkClassName='page-link'
+                    containerClassName='pagination'
+                    activeClassName='active'
+                />
+            </div>
         </>
     )
 }

@@ -12,6 +12,22 @@ code {
     monospace;
 }
 
-.table {
-  padding  : 35px;
+.app-container {
+
+  .btn-add {
+    border         : none;
+    padding        : 6px;
+    border-radius  : 5px;
+    color          : #ffffff;
+
+    &:hover {
+      opacity  : 0.8;
+    }
+  }
+
+  //table
+  .paginate {
+    display          : flex;
+    justify-content  : center;
+  }
 }
