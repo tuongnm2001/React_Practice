@@ -2,10 +2,11 @@ import React, { useState } from 'react';
 import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
 import Form from 'react-bootstrap/Form';
-
+import { postCreateNewUser } from '../services/UserService';
+import { toast } from 'react-toastify';
 const ModalAddNewUser = (props) => {
 
-    const { showModalAddUser, setShowModalAddUser } = props
+    const { showModalAddUser, setShowModalAddUser, getAllUser, handleSubmitUser } = props
     const [name, setName] = useState('')
     const [job, setJob] = useState('')
 
@@ -13,8 +14,17 @@ const ModalAddNewUser = (props) => {
         setShowModalAddUser(false)
     }
 
-    const handleSubmitAddUser = () => {
-        console.log('name : ', name, 'job : ', job);
+    const handleSubmitAddUser = async () => {
+        let data = await postCreateNewUser(name, job)
+        if (data && data.id) {
+            handleClose();
+            setName('')
+            setJob('')
+            toast.success('Create user success')
+            handleSubmitUser({ first_name: name, id: data.id })
+        } else {
+            toast.error('Create user faild')
+        }
     }
 
     return (

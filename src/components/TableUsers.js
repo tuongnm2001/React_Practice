@@ -1,27 +1,9 @@
-import { useEffect, useState } from 'react';
 import Table from 'react-bootstrap/Table';
-import { fetchAllUser } from '../services/UserService';
 import ReactPaginate from 'react-paginate';
 
-const TableUsers = () => {
+const TableUsers = (props) => {
 
-    const [listUser, setListUser] = useState([])
-    const [totalUsers, setTotalUser] = useState(0)
-    const [totalPages, setTotalPages] = useState(0)
-
-    useEffect(() => {
-        getAllUser(1);
-    }, [])
-
-    const getAllUser = async (page) => {
-        let res = await fetchAllUser(page);
-        console.log(res);
-        if (res && res.data) {
-            setTotalUser(res.total)
-            setListUser(res.data)
-            setTotalPages(res.total_pages)
-        }
-    }
+    const { listUser, totalPages, getAllUser } = props
 
     const handlePageClick = (event) => {
         getAllUser(+event.selected + 1)
