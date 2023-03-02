@@ -1,0 +1,15 @@
+  //table
+  .paginate {
+      display          : flex;
+      justify-content  : center;
+  }
+
+  .sort-header {
+      display          : flex;
+      justify-content  : space-between;
+
+      i {
+          cursor   : pointer;
+          padding  : 0 4px;
+      }
+  }

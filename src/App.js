@@ -81,6 +81,7 @@ function App() {
           <TableUsers
             getAllUser={getAllUser}
             listUser={listUser}
+            setListUser={setListUser}
             totalPages={totalPages}
             handleShowModalEditUser={handleShowModalEditUser}
             handleShowDelUser={handleShowDelUser}

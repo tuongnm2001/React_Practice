@@ -1,12 +1,27 @@
+import { useState } from 'react';
 import Table from 'react-bootstrap/Table';
 import ReactPaginate from 'react-paginate';
+import './TableUser.scss'
+import _ from 'lodash';
 
 const TableUsers = (props) => {
 
-    const { listUser, totalPages, getAllUser } = props
+    const { listUser, setListUser, totalPages, getAllUser } = props
+
+    const [sortBy, setSortBy] = useState('asc')
+    const [sortFiled, setSortField] = useState('id')
 
     const handlePageClick = (event) => {
         getAllUser(+event.selected + 1)
+    }
+
+    const handleSort = (sortBy, sortFiled) => {
+        setSortBy(sortBy)
+        setSortField(sortFiled)
+
+        let cloneListUser = _.cloneDeep(listUser)
+        cloneListUser = _.orderBy(cloneListUser, [sortFiled], [sortBy])
+        setListUser(cloneListUser)
     }
 
     return (
@@ -15,9 +30,47 @@ const TableUsers = (props) => {
                 <Table striped bordered hover>
                     <thead>
                         <tr>
-                            <th>ID</th>
+                            <th>
+                                <div className='sort-header'>
+                                    <span>ID</span>
+                                    <span>
+                                        <i
+                                            onClick={() => handleSort('desc', 'id')}
+                                            className="fas fa-arrow-up">
+                                        </i>
+
+                                        <i
+                                            onClick={() => handleSort('asc', 'id')}
+                                            className="fas fa-arrow-down">
+                                        </i>
+                                    </span>
+                                </div>
+                            </th>
+
                             <th>Email</th>
-                            <th>First Name</th>
+
+                            <th>
+                                <div className='sort-header'>
+                                    <span>First Name</span>
+                                    <span>
+
+                                        <i
+                                            onClick={() => handleSort('desc', 'first_name')}
+                                            className="fas fa-arrow-up">
+
+                                        </i>
+
+                                        <i
+                                            onClick={() => handleSort('asc', 'first_name')}
+                                            className="fas fa-arrow-down">
+
+                                        </i>
+
+
+                                    </span>
+                                </div>
+                            </th>
+
                             <th>Last Name</th>
                         </tr>
                     </thead>
