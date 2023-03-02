@@ -2,7 +2,7 @@ import { useState } from 'react';
 import Table from 'react-bootstrap/Table';
 import ReactPaginate from 'react-paginate';
 import './TableUser.scss'
-import _ from 'lodash';
+import _, { debounce } from 'lodash';
 
 const TableUsers = (props) => {
 
@@ -24,8 +24,28 @@ const TableUsers = (props) => {
         setListUser(cloneListUser)
     }
 
+    const handleSearch = debounce((event) => {
+        let tern = event.target.value
+        if (tern) {
+            let cloneListUser = _.cloneDeep(listUser)
+            cloneListUser = cloneListUser.filter(item => item.email.includes(tern))
+            setListUser(cloneListUser);
+        } else {
+            getAllUser(1);
+        }
+    }, 300)
+
     return (
         <>
+            <div className='col-4 my-3'>
+                <input
+                    className='form-control'
+                    placeholder='Search user by email'
+                    // value={keyword}
+                    onChange={(event) => handleSearch(event)}
+                />
+            </div>
+
             <div className='table'>
                 <Table striped bordered hover>
                     <thead>
