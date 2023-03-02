@@ -6,13 +6,16 @@ import ModalAddNewUser from './components/ModalAddNewUser';
 import TableUsers from './components/TableUsers';
 import { ToastContainer } from 'react-toastify';
 import { fetchAllUser } from './services/UserService';
+import ModalEditUser from './components/ModalEditUser';
 
 function App() {
 
   const [showModalAddUser, setShowModalAddUser] = useState(false)
+  const [showModalEditUser, setShowModalEditUser] = useState(false)
   const [listUser, setListUser] = useState([])
   const [totalUsers, setTotalUser] = useState(0)
   const [totalPages, setTotalPages] = useState(0)
+  const [dataEditUser, setDataEditUser] = useState({})
 
   useEffect(() => {
     getAllUser(1);
@@ -37,6 +40,11 @@ function App() {
     console.log('check user : ', user);
   }
 
+  const handleShowModalEditUser = (user) => {
+    setShowModalEditUser(true)
+    setDataEditUser(user);
+  }
+
   return (
     <>
       <div className='app-container'>
@@ -52,6 +60,7 @@ function App() {
             getAllUser={getAllUser}
             listUser={listUser}
             totalPages={totalPages}
+            handleShowModalEditUser={handleShowModalEditUser}
           />
         </Container>
 
@@ -61,6 +70,12 @@ function App() {
           setShowModalAddUser={setShowModalAddUser}
           getAllUser={getAllUser}
           handleSubmitUser={handleSubmitUser}
+        />
+
+        <ModalEditUser
+          showModalEditUser={showModalEditUser}
+          setShowModalEditUser={setShowModalEditUser}
+          dataEditUser={dataEditUser}
         />
       </div>
 

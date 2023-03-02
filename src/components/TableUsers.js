@@ -32,6 +32,15 @@ const TableUsers = (props) => {
                                         <td>{item.email}</td>
                                         <td>{item.first_name}</td>
                                         <td>{item.last_name}</td>
+                                        <td>
+                                            <button
+                                                className='btn btn-warning mx-3'
+                                                onClick={() => props.handleShowModalEditUser(item)}>
+                                                Edit
+                                            </button>
+
+                                            <button className='btn btn-danger'>Delete</button>
+                                        </td>
                                     </tr>
                                 )
                             })
