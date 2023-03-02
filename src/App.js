@@ -8,15 +8,18 @@ import { ToastContainer } from 'react-toastify';
 import { fetchAllUser } from './services/UserService';
 import ModalEditUser from './components/ModalEditUser';
 import _ from 'lodash'
+import ModalDelUser from './components/ModalDelUser';
 
 function App() {
 
   const [showModalAddUser, setShowModalAddUser] = useState(false)
   const [showModalEditUser, setShowModalEditUser] = useState(false)
+  const [showModalDelUser, setShowModalDelUser] = useState(false)
   const [listUser, setListUser] = useState([])
   const [totalUsers, setTotalUser] = useState(0)
   const [totalPages, setTotalPages] = useState(0)
   const [dataEditUser, setDataEditUser] = useState({})
+  const [dataDelUser, setDataDelUser] = useState({})
 
   useEffect(() => {
     getAllUser(1);
@@ -53,6 +56,11 @@ function App() {
     setListUser(cloneListUser)
   }
 
+  const handleShowDelUser = (user) => {
+    setShowModalDelUser(true)
+    setDataDelUser(user);
+  }
+
   return (
     <>
       <div className='app-container'>
@@ -69,6 +77,7 @@ function App() {
             listUser={listUser}
             totalPages={totalPages}
             handleShowModalEditUser={handleShowModalEditUser}
+            handleShowDelUser={handleShowDelUser}
           />
         </Container>
 
@@ -87,6 +96,13 @@ function App() {
           handleEditUserFromModal={handleEditUserFromModal}
 
         />
+
+        <ModalDelUser
+          showModalDelUser={showModalDelUser}
+          setShowModalDelUser={setShowModalDelUser}
+          dataDelUser={dataDelUser}
+        />
+
       </div>
 
       <ToastContainer
