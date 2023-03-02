@@ -21,6 +21,7 @@ function App() {
   const [totalPages, setTotalPages] = useState(0)
   const [dataEditUser, setDataEditUser] = useState({})
   const [dataDelUser, setDataDelUser] = useState({})
+  const [dataExport, setDataExport] = useState([])
 
   useEffect(() => {
     getAllUser(1);
@@ -68,12 +69,24 @@ function App() {
     setListUser(cloneListUser)
   }
 
-  const csvData = [
-    ["firstname", "lastname", "email"],
-    ["Ahmed", "Tomi", "ah@smthing.co.com"],
-    ["Raed", "Labes", "rl@smthing.co.com"],
-    ["Yezzi", "Min l3b", "ymin@cocococo.com"]
-  ];
+  const getUsersExport = (event, done) => {
+    let result = [];
+    if (listUser && listUser.length > 0) {
+      //header
+      result.push(['id', 'Email', 'FirstName', 'LastName'])
+      //body
+      listUser.map((item, index) => {
+        let arr = [];
+        arr[0] = item.id
+        arr[1] = item.email
+        arr[2] = item.first_name
+        arr[3] = item.last_name
+        result.push(arr);
+      })
+      setDataExport(result);
+      done();
+    }
+  }
 
   return (
     <>
@@ -84,9 +97,12 @@ function App() {
             <label className='btn-import' htmlFor='test'><i className='fa-solid fa-file-import'></i> Import</label>
             <input type={'file'} id='test' hidden />
             <CSVLink
-              className='csvLink'
-              data={csvData}
               filename={'user.csv'}
+              className='csvLink'
+              data={dataExport}
+              asyncOnClick={true}
+              onClick={getUsersExport}
+
             >
               <i className='fa-solid fa-file-arrow-down'></i> Export
             </CSVLink>
