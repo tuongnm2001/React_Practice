@@ -12,6 +12,10 @@ const putEditUser = (page, name, job) => {
     return axios.put(`/api/users/${page}`, { name, job })
 }
 
+const deleteUser = (id) => {
+    return axios.delete(`/api/users/${id}`)
+}
+
 export {
-    fetchAllUser, postCreateNewUser, putEditUser
+    fetchAllUser, postCreateNewUser, putEditUser, deleteUser
 }

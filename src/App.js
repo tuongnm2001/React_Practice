@@ -61,6 +61,12 @@ function App() {
     setDataDelUser(user);
   }
 
+  const handleDeleteUserFromModal = (user) => {
+    let cloneListUser = _.cloneDeep(listUser);
+    cloneListUser = cloneListUser.filter(item => item.id !== user.id)
+    setListUser(cloneListUser)
+  }
+
   return (
     <>
       <div className='app-container'>
@@ -94,13 +100,14 @@ function App() {
           setShowModalEditUser={setShowModalEditUser}
           dataEditUser={dataEditUser}
           handleEditUserFromModal={handleEditUserFromModal}
-
         />
 
         <ModalDelUser
           showModalDelUser={showModalDelUser}
           setShowModalDelUser={setShowModalDelUser}
           dataDelUser={dataDelUser}
+          handleDeleteUserFromModal={handleDeleteUserFromModal}
+
         />
 
       </div>
