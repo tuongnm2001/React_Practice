@@ -14,14 +14,57 @@ code {
 
 .app-container {
 
-  .btn-add {
-    border         : none;
-    padding        : 6px;
-    border-radius  : 5px;
-    color          : #ffffff;
+  .btn-add-import {
+    float      : right;
+    display    : flex;
+    font-size  : 14px;
 
-    &:hover {
-      opacity  : 0.8;
+    .btn-import {
+      border            : none;
+      border-radius     : 5px;
+      color             : #ffffff;
+      margin-top        : 7px;
+      background-color  : rgb(108, 121, 113);
+      margin-right      : 10px;
+      padding           : 5px 10px;
+
+      &:hover {
+        opacity  : 0.8;
+      }
+    }
+
+    .csvLink {
+      border            : none;
+      border-radius     : 5px;
+      color             : #ffffff;
+      margin-top        : 7px;
+      background-color  : rgb(50, 166, 205);
+      text-decoration   : none;
+      margin-right      : 10px;
+      padding           : 5px 12px;
+
+      &:hover {
+        opacity  : 0.8;
+      }
+
+      span {
+        font-weight  : 600;
+        color        : white;
+        display      : flex;
+        padding      : 7px 13px;
+      }
+    }
+
+    .btn-add {
+      border         : none;
+      border-radius  : 5px;
+      color          : #ffffff;
+      font-size      : 15px;
+      margin-top     : 7px;
+
+      &:hover {
+        opacity  : 0.8;
+      }
     }
   }
 }

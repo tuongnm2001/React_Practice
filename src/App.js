@@ -9,6 +9,7 @@ import { fetchAllUser } from './services/UserService';
 import ModalEditUser from './components/ModalEditUser';
 import _ from 'lodash'
 import ModalDelUser from './components/ModalDelUser';
+import { CSVLink, CSVDownload } from "react-csv";
 
 function App() {
 
@@ -67,17 +68,37 @@ function App() {
     setListUser(cloneListUser)
   }
 
+  const csvData = [
+    ["firstname", "lastname", "email"],
+    ["Ahmed", "Tomi", "ah@smthing.co.com"],
+    ["Raed", "Labes", "rl@smthing.co.com"],
+    ["Yezzi", "Min l3b", "ymin@cocococo.com"]
+  ];
+
   return (
     <>
       <div className='app-container'>
         <Header />
         <Container>
-          <button
-            className='my-3 btn-add btn btn-success'
-            onClick={() => handleAddNewUser()}
-          >
-            Add New User
-          </button>
+          <div className='btn-add-import'>
+            <label className='btn-import' htmlFor='test'><i className='fa-solid fa-file-import'></i> Import</label>
+            <input type={'file'} id='test' hidden />
+            <CSVLink
+              className='csvLink'
+              data={csvData}
+              filename={'user.csv'}
+            >
+              <i className='fa-solid fa-file-arrow-down'></i> Export
+            </CSVLink>
+
+            <button
+              className='btn-add btn btn-success'
+              onClick={() => handleAddNewUser()}
+            >
+              <i className='fa-solid fa-circle-plus'></i> Add New User
+            </button>
+          </div>
+
           <TableUsers
             getAllUser={getAllUser}
             listUser={listUser}
@@ -111,7 +132,7 @@ function App() {
 
         />
 
-      </div>
+      </div >
 
       <ToastContainer
         position="top-right"
