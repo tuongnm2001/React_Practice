@@ -45,6 +45,7 @@ const ModalAddNewUser = (props) => {
                             onChange={(event) => setName(event.target.value)}
                             type="text"
                             placeholder="Enter Name"
+                            value={name}
                         />
                     </Form.Group>
                     <Form.Group className="mb-3" controlId="formGroupPassword">
@@ -53,6 +54,8 @@ const ModalAddNewUser = (props) => {
                             onChange={(event) => setJob(event.target.value)}
                             type="text"
                             placeholder="Job"
+                            value={job}
+
                         />
                     </Form.Group>
                 </Form>

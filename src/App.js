@@ -7,6 +7,7 @@ import TableUsers from './components/TableUsers';
 import { ToastContainer } from 'react-toastify';
 import { fetchAllUser } from './services/UserService';
 import ModalEditUser from './components/ModalEditUser';
+import _ from 'lodash'
 
 function App() {
 
@@ -45,6 +46,13 @@ function App() {
     setDataEditUser(user);
   }
 
+  const handleEditUserFromModal = (user) => {
+    let cloneListUser = _.cloneDeep(listUser);
+    let index = listUser.findIndex(item => item.id === user.id)
+    cloneListUser[index].first_name = user.first_name;
+    setListUser(cloneListUser)
+  }
+
   return (
     <>
       <div className='app-container'>
@@ -76,6 +84,8 @@ function App() {
           showModalEditUser={showModalEditUser}
           setShowModalEditUser={setShowModalEditUser}
           dataEditUser={dataEditUser}
+          handleEditUserFromModal={handleEditUserFromModal}
+
         />
       </div>
 

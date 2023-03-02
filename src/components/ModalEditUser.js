@@ -2,10 +2,12 @@ import React, { useEffect, useState } from 'react';
 import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
 import Form from 'react-bootstrap/Form';
+import { putEditUser } from '../services/UserService';
+import { toast } from 'react-toastify';
 
 const ModalEditUser = (props) => {
 
-    const { showModalEditUser, setShowModalEditUser, dataEditUser } = props
+    const { showModalEditUser, setShowModalEditUser, dataEditUser, handleEditUserFromModal } = props
     const [name, setName] = useState('')
     const [job, setJob] = useState('')
 
@@ -17,8 +19,17 @@ const ModalEditUser = (props) => {
         setShowModalEditUser(false)
     }
 
-    const handleEditUser = () => {
-        alert('a')
+    const handleEditUser = async (page) => {
+        let res = await putEditUser(page, name, job);
+        if (res && res.updatedAt) {
+            handleEditUserFromModal({
+                first_name: name,
+                id: dataEditUser.id
+            })
+        }
+        toast.success('Update success')
+        handleClose()
+
     }
 
     return (
@@ -39,7 +50,7 @@ const ModalEditUser = (props) => {
                             onChange={(event) => setName(event.target.value)}
                             type="text"
                             placeholder="Enter Name"
-                            value={name}
+                            value={name || ''}
                         />
                     </Form.Group>
                     <Form.Group className="mb-3" controlId="formGroupPassword">
@@ -48,6 +59,7 @@ const ModalEditUser = (props) => {
                             onChange={(event) => setJob(event.target.value)}
                             type="text"
                             placeholder="Job"
+                            value={job}
                         />
                     </Form.Group>
                 </Form>
