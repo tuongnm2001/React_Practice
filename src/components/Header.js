@@ -3,12 +3,9 @@ import Nav from 'react-bootstrap/Nav';
 import Navbar from 'react-bootstrap/Navbar';
 import NavDropdown from 'react-bootstrap/NavDropdown';
 import { ImTumblr2 } from 'react-icons/im';
-import { useLocation, NavLink } from 'react-router-dom'
+import { NavLink } from 'react-router-dom'
 
 const Header = () => {
-
-    let location = useLocation()
-
     return (
         <>
             <Navbar collapseOnSelect expand="lg" bg="dark" variant="dark">

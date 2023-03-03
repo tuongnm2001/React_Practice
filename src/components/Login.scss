@@ -1,0 +1,75 @@
+.login-container {
+    display         : flex;
+    flex-direction  : column;
+    margin          : 0 auto;
+    cursor          : pointer;
+
+    .title {
+        text-align   : center;
+        font-weight  : 600;
+        font-size    : 24px;
+        padding-top  : 30px;
+
+    }
+
+    .text-email-username {
+        font-weight     : 600;
+        padding-bottom  : 3px;
+        margin-top      : 20px;
+        font-size       : 14px;
+    }
+
+    input {
+        padding        : 8px 5px;
+        outline        : none;
+        background     : #1618230f;
+        border         : 2px solid #1618230f;
+        margin-bottom  : 7px;
+        border-radius  : 3px;
+        width          : 100%;
+
+        &:hover {
+            background-color  : #dedede;
+            outline           : none;
+        }
+    }
+
+    .input-2 {
+        position  : relative;
+
+        i {
+            position  : absolute;
+            top       : 15px;
+            right     : 10px;
+        }
+    }
+
+    button {
+        margin-top     : 25px;
+        padding        : 7px;
+        border-radius  : 3px;
+        outline        : none;
+        border         : none;
+
+        &:hover {
+            opacity  : 0.9;
+        }
+
+        &.active {
+            background-color  : #ee365b;
+            color             : white;
+        }
+    }
+
+    button[disabled=disabled],
+    button:disabled {
+        cursor  : not-allowed;
+    }
+
+    .goBack {
+        text-align  : center;
+        margin-top  : 30px;
+    }
+
+
+}

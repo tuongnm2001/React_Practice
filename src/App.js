@@ -12,6 +12,7 @@ import ModalDelUser from './components/ModalDelUser';
 import Papa from 'papaparse';
 import Home from './components/Home';
 import { Routes, Route, Link } from 'react-router-dom'
+import Login from './components/Login';
 
 const App = () => {
 
@@ -81,6 +82,7 @@ const App = () => {
                   handleShowDelUser={handleShowDelUser} />
               }>
             </Route>
+            <Route path='/login' element={<Login />}></Route>
 
           </Routes>
         </Container>

@@ -1,0 +1,32 @@
+.home-container {
+
+    .titlepage {
+        margin-top   : 89px;
+        margin-left  : 84px;
+
+        h2 {
+            font-size  : 50px;
+        }
+
+        button {
+            padding           : 9px 25px;
+            border-radius     : 5px;
+            border            : none;
+            font-weight       : 400;
+            background-color  : rgb(23, 9, 76);
+            transition        : color 1s ease;
+            transition        : background 1s ease;
+            margin-top        : 25px;
+
+            &:hover {
+                background-color  : #fbca47;
+
+            }
+
+            .readmore {
+                font-size  : 16px;
+                color      : white;
+            }
+        }
+    }
+}
