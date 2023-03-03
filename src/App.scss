@@ -14,11 +14,19 @@ code {
 
 .app-container {
 
+  //logo
+  .logo {
+    color         : #e93a3a;
+    margin-right  : 5px;
+    font-size     : 32px;
+  }
+
   .btn-add-import {
     float       : right;
     display     : flex;
     font-size   : 14px;
-    margin-top  : -5px;
+    margin-top  : -58px;
+
 
     .btn-import {
       border            : none;
