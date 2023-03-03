@@ -4,14 +4,15 @@ import './App.scss';
 import Header from './components/Header';
 import ModalAddNewUser from './components/ModalAddNewUser';
 import TableUsers from './components/TableUsers';
-import { ToastContainer } from 'react-toastify';
+import { toast, ToastContainer } from 'react-toastify';
 import { fetchAllUser } from './services/UserService';
 import ModalEditUser from './components/ModalEditUser';
 import _ from 'lodash'
 import ModalDelUser from './components/ModalDelUser';
 import { CSVLink, CSVDownload } from "react-csv";
+import Papa from 'papaparse';
 
-function App() {
+const App = () => {
 
   const [showModalAddUser, setShowModalAddUser] = useState(false)
   const [showModalEditUser, setShowModalEditUser] = useState(false)
@@ -88,6 +89,54 @@ function App() {
     }
   }
 
+  const handleImportCSV = (event) => {
+
+    if (event.target && event.target.files && event.target.files[0]) {
+      let file = event.target.files[0];
+      if (file.type !== 'text/csv') {
+        toast.error('Only accept csv files...')
+        return;
+      }
+
+      // Parse local CSV file
+      Papa.parse(file, {
+        complete: function (results) {
+          let rawCSV = results.data;
+          if (rawCSV.length > 0) {
+            if (rawCSV[0] && rawCSV[0].length === 3) {
+              if (
+                rawCSV[0][0] !== 'email'
+                ||
+                rawCSV[0][1] !== 'first_name'
+                ||
+                rawCSV[0][2] !== 'last_name'
+              ) {
+                toast.error('Wrong format Header CSV file!')
+              } else {
+                let result = []
+                rawCSV.map((item, index) => {
+                  if (index > 0 && item.length === 3) {
+                    let obj = {};
+                    obj.email = item[0]
+                    obj.first_name = item[1]
+                    obj.last_name = item[2]
+                    result.push(obj)
+                  }
+                })
+                setListUser(result)
+              }
+            } else {
+              toast.error('Wrong format CSV file!')
+            }
+          } else {
+            toast.error('Not found data on CSV file')
+          }
+          console.log("Finished:", results.data);
+        }
+      });
+    }
+  }
+
   return (
     <>
       <div className='app-container'>
@@ -95,7 +144,12 @@ function App() {
         <Container>
           <div className='btn-add-import'>
             <label className='btn-import' htmlFor='test'><i className='fa-solid fa-file-import'></i> Import</label>
-            <input type={'file'} id='test' hidden />
+            <input
+              type={'file'}
+              id='test'
+              onChange={(event) => handleImportCSV(event)}
+              hidden
+            />
             <CSVLink
               filename={'user.csv'}
               className='csvLink'
