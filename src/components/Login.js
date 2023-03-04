@@ -1,9 +1,9 @@
 import { useContext, useEffect, useRef, useState } from 'react'
 import './Login.scss'
-import { loginApi } from '../services/UserService'
 import { toast } from 'react-toastify'
 import { Link, useNavigate } from 'react-router-dom'
-import { UserContext } from '../context/UserContext'
+import { hanleLoginRedux } from '../redux/actions/userAction'
+import { useDispatch, useSelector } from 'react-redux';
 
 const Login = () => {
 
@@ -12,33 +12,31 @@ const Login = () => {
     const [isShowPassword, setIsShowPassword] = useState('')
     const [loadingApi, setLoadingApi] = useState(false)
     const navigate = useNavigate();
-    const { loginContext } = useContext(UserContext)
     const passwordRef = useRef()
+    const dispath = useDispatch();
+
+    const isLoading = useSelector(state => state.user.isLoading)
+    const account = useSelector(state => state.user.account)
 
     const handleLogin = async () => {
         if (!email || !password) {
             toast.error('Email/Password is required!')
             return;
         }
-        setLoadingApi(true)
+        dispath(hanleLoginRedux(email, password))
 
-        let res = await loginApi(email.trim(), password)
-        if (res && res.token) {
-            loginContext(email, res.token)
-            navigate('/')
-            toast.success('Login success!')
-        } else {
-            //error
-            if (res && res.status === 400) {
-                toast.error(res.data.error)
-            }
-        }
-        setLoadingApi(false)
+
     }
 
     const handleGoBack = () => {
         navigate('/')
     }
+
+    useEffect(() => {
+        if (account && account.auth === true) {
+            navigate('/')
+        }
+    }, [account])
 
     return (
         <div className='login-container col-12 col-sm-4'>
@@ -81,7 +79,7 @@ const Login = () => {
                 disabled={email && password ? false : true}
                 onClick={() => handleLogin()}
             >
-                Login {loadingApi && <i className='fa-solid fa-circle-notch fa-spin'></i>}
+                Login {isLoading && <i className='fa-solid fa-circle-notch fa-spin'></i>}
             </button>
             <div className='goBack'>
                 <i className='fa-solid fa-angles-left'></i>

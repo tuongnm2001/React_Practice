@@ -11,10 +11,10 @@ import ModalDelUser from './components/ModalDelUser';
 import Home from './components/Home';
 import { Routes, Route } from 'react-router-dom'
 import Login from './components/Login';
-import { UserContext } from './context/UserContext';
 import PrivateRoutes from './routes/PrivateRoutes';
 import NotFound from './components/NotFound';
-import { useSelector } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
+import { handleRefresh } from './redux/actions/userAction';
 
 const App = () => {
 
@@ -25,16 +25,12 @@ const App = () => {
   const [totalPages, setTotalPages] = useState(0)
   const [dataEditUser, setDataEditUser] = useState({})
   const [dataDelUser, setDataDelUser] = useState({})
-  const { user, loginContext } = useContext(UserContext)
 
+  const dispatch = useDispatch();
   //redux
-  const dataUserRedux = useSelector(state => state.user.account)
-
-  console.log('check dataUserRedux : ', dataUserRedux);
-
   useEffect(() => {
     if (localStorage.getItem('token')) {
-      loginContext(localStorage.getItem('email'), localStorage.getItem('token'))
+      dispatch(handleRefresh())
     }
   }, [])
 

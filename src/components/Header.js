@@ -1,30 +1,31 @@
-import { useContext, useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import Container from 'react-bootstrap/Container';
 import Nav from 'react-bootstrap/Nav';
 import Navbar from 'react-bootstrap/Navbar';
 import NavDropdown from 'react-bootstrap/NavDropdown';
 import { ImTumblr2 } from 'react-icons/im';
+import { useDispatch, useSelector } from 'react-redux';
 import { NavLink, useNavigate } from 'react-router-dom'
 import { toast } from 'react-toastify';
-import { UserContext } from '../context/UserContext';
+import { handleLogoutRedux } from '../redux/actions/userAction';
 
 const Header = () => {
 
-    const { logout, user } = useContext(UserContext)
     const navigate = useNavigate()
-    const [hideHeader, setHideHeader] = useState(false)
 
-    // useEffect(() => {
-    //     if (window.locationbar.pathname === '/login') {
-    //         setHideHeader(true)
-    //     }
-    // }, [])
+    const user = useSelector(state => state.user.account)
+    const dispatch = useDispatch()
 
     const handleLogout = () => {
-        logout();
-        navigate('/login')
-        toast.success('Logout Success!')
+        dispatch(handleLogoutRedux());
     }
+
+    useEffect(() => {
+        if (user && user.auth === false) {
+            navigate('/')
+            toast.success('Logout success')
+        }
+    }, [user])
 
     return (
         <>
