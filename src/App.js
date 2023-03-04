@@ -14,6 +14,7 @@ import Login from './components/Login';
 import { UserContext } from './context/UserContext';
 import PrivateRoutes from './routes/PrivateRoutes';
 import NotFound from './components/NotFound';
+import { useSelector } from 'react-redux'
 
 const App = () => {
 
@@ -24,9 +25,12 @@ const App = () => {
   const [totalPages, setTotalPages] = useState(0)
   const [dataEditUser, setDataEditUser] = useState({})
   const [dataDelUser, setDataDelUser] = useState({})
-
   const { user, loginContext } = useContext(UserContext)
-  console.log('check user : ', user);
+
+  //redux
+  const dataUserRedux = useSelector(state => state.user.account)
+
+  console.log('check dataUserRedux : ', dataUserRedux);
 
   useEffect(() => {
     if (localStorage.getItem('token')) {
