@@ -13,6 +13,7 @@ import { Routes, Route } from 'react-router-dom'
 import Login from './components/Login';
 import { UserContext } from './context/UserContext';
 import PrivateRoutes from './routes/PrivateRoutes';
+import NotFound from './components/NotFound';
 
 const App = () => {
 
@@ -97,6 +98,7 @@ const App = () => {
               </PrivateRoutes>
             }>
             </Route>
+            <Route path='*' element={<NotFound />}></Route>
           </Routes>
         </Container>
       </div >

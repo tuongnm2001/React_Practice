@@ -1,4 +1,4 @@
-import { useContext, useEffect, useState } from 'react'
+import { useContext, useEffect, useRef, useState } from 'react'
 import './Login.scss'
 import { loginApi } from '../services/UserService'
 import { toast } from 'react-toastify'
@@ -13,13 +13,7 @@ const Login = () => {
     const [loadingApi, setLoadingApi] = useState(false)
     const navigate = useNavigate();
     const { loginContext } = useContext(UserContext)
-
-    // useEffect(() => {
-    //     let token = localStorage.getItem('token');
-    //     if (token) {
-    //         navigate('/')
-    //     }
-    // }, [])
+    const passwordRef = useRef()
 
     const handleLogin = async () => {
         if (!email || !password) {
@@ -28,7 +22,7 @@ const Login = () => {
         }
         setLoadingApi(true)
 
-        let res = await loginApi(email, password)
+        let res = await loginApi(email.trim(), password)
         if (res && res.token) {
             loginContext(email, res.token)
             navigate('/')
@@ -55,6 +49,12 @@ const Login = () => {
                 value={email}
                 type={'text'}
                 placeholder='Email or Username'
+                onKeyUp={event => {
+                    if (event.key === 'Enter') {
+                        passwordRef.current.focus();
+                    }
+                }}
+
             />
             <div className='input-2'>
                 <input
@@ -62,6 +62,12 @@ const Login = () => {
                     value={password}
                     type={isShowPassword === true ? 'text' : 'password'}
                     placeholder='Password'
+                    ref={passwordRef}
+                    onKeyUp={event => {
+                        if (event.key === 'Enter') {
+                            handleLogin();
+                        }
+                    }}
                 />
                 <i
                     onClick={() => setIsShowPassword(!isShowPassword)}
