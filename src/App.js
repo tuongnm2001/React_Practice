@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useContext } from 'react';
 import { Container } from 'react-bootstrap';
 import './App.scss';
 import Header from './components/Header';
@@ -13,6 +13,7 @@ import Papa from 'papaparse';
 import Home from './components/Home';
 import { Routes, Route, Link } from 'react-router-dom'
 import Login from './components/Login';
+import { UserContext } from './context/UserContext';
 
 const App = () => {
 
@@ -23,6 +24,15 @@ const App = () => {
   const [totalPages, setTotalPages] = useState(0)
   const [dataEditUser, setDataEditUser] = useState({})
   const [dataDelUser, setDataDelUser] = useState({})
+
+  const { user, loginContext } = useContext(UserContext)
+  console.log('check user : ', user);
+
+  useEffect(() => {
+    if (localStorage.getItem('token')) {
+      loginContext(localStorage.getItem('email'), localStorage.getItem('token'))
+    }
+  }, [])
 
   useEffect(() => {
     getAllUser(1);
