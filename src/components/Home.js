@@ -17,7 +17,7 @@ const Home = () => {
                             You never get a second chance to make a great first impression.
                             We just heard an awesome new person became a part of our team! Welcome to Tuong NM!
                         </p>
-                        <button className="read_more" href="#"><span className='readmore'>READ MORE</span></button>
+                        <button className="read_more" href="#"><span className='readmore'>HELLO GUYS !</span></button>
                     </div>
                 </div>
             </div>
