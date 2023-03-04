@@ -5,7 +5,7 @@ import './TableUser.scss'
 import _, { debounce } from 'lodash';
 import { CSVLink, CSVDownload } from "react-csv";
 import Papa from 'papaparse';
-import { toast, ToastContainer } from 'react-toastify';
+import { toast } from 'react-toastify';
 import ModalAddNewUser from './ModalAddNewUser';
 
 

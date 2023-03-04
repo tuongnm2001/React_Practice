@@ -2,18 +2,17 @@ import { useState, useEffect, useContext } from 'react';
 import { Container } from 'react-bootstrap';
 import './App.scss';
 import Header from './components/Header';
-import ModalAddNewUser from './components/ModalAddNewUser';
 import TableUsers from './components/TableUsers';
-import { toast, ToastContainer } from 'react-toastify';
+import { ToastContainer } from 'react-toastify';
 import { fetchAllUser } from './services/UserService';
 import ModalEditUser from './components/ModalEditUser';
 import _ from 'lodash'
 import ModalDelUser from './components/ModalDelUser';
-import Papa from 'papaparse';
 import Home from './components/Home';
-import { Routes, Route, Link } from 'react-router-dom'
+import { Routes, Route } from 'react-router-dom'
 import Login from './components/Login';
 import { UserContext } from './context/UserContext';
+import PrivateRoutes from './routes/PrivateRoutes';
 
 const App = () => {
 
@@ -32,6 +31,10 @@ const App = () => {
     if (localStorage.getItem('token')) {
       loginContext(localStorage.getItem('email'), localStorage.getItem('token'))
     }
+  }, [])
+
+  useEffect(() => {
+    getAllUser(1);
   }, [])
 
   useEffect(() => {
@@ -82,18 +85,18 @@ const App = () => {
           <Routes>
 
             <Route path='/' element={<Home />}></Route>
-            <Route path='/users'
-              element={
+            <Route path='/login' element={<Login />}></Route>
+            <Route path='/users' element={
+              <PrivateRoutes>
                 <TableUsers getAllUser={getAllUser}
                   listUser={listUser}
                   setListUser={setListUser}
                   totalPages={totalPages}
                   handleShowModalEditUser={handleShowModalEditUser}
                   handleShowDelUser={handleShowDelUser} />
-              }>
+              </PrivateRoutes>
+            }>
             </Route>
-            <Route path='/login' element={<Login />}></Route>
-
           </Routes>
         </Container>
       </div >
@@ -112,8 +115,6 @@ const App = () => {
         handleDeleteUserFromModal={handleDeleteUserFromModal}
 
       />
-
-
 
       <ToastContainer
         position="top-right"
