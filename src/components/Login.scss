@@ -20,7 +20,7 @@
     }
 
     input {
-        padding        : 8px 5px;
+        // padding        : 8px 5px;
         outline        : none;
         background     : #1618230f;
         border         : 2px solid #1618230f;
@@ -32,6 +32,11 @@
             background-color  : #dedede;
             outline           : none;
         }
+    }
+
+    input[type=text],
+    input[type=password] {
+        padding  : 8px 15px;
     }
 
     .input-2 {
