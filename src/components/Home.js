@@ -12,7 +12,7 @@ const Home = () => {
                 </div>
                 <div className="col-md-12 col-lg-7">
                     <div className="titlepage">
-                        <h2> Welcome to <span style={{ color: '#fbca47' }}>TUONG NM</span></h2>
+                        <h2> Welcome to <span style={{ color: '#fbca47' }}>Tuong NM</span></h2>
                         <p>
                             You never get a second chance to make a great first impression.
                             We just heard an awesome new person became a part of our team! Welcome to Tuong NM!

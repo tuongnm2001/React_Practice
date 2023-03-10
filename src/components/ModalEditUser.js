@@ -7,28 +7,33 @@ import { toast } from 'react-toastify';
 
 const ModalEditUser = (props) => {
 
-    const { showModalEditUser, setShowModalEditUser, dataEditUser, handleEditUserFromModal } = props
-    const [name, setName] = useState('')
-    const [job, setJob] = useState('')
+    const { showModalEditUser, setShowModalEditUser, dataEditUser, getAllUser } = props
+    const [email, setEmail] = useState('')
+    const [password, setPassword] = useState('')
+    const [username, setUsername] = useState('')
+    const [loading, setLoading] = useState(false)
 
     useEffect(() => {
-        setName(dataEditUser.first_name)
+        setEmail(dataEditUser.email)
+        setPassword(dataEditUser.password)
+        setUsername(dataEditUser.username)
     }, [dataEditUser])
 
     const handleClose = () => {
         setShowModalEditUser(false)
     }
 
-    const handleEditUser = async (page) => {
-        let res = await putEditUser(page, name, job);
-        if (res && res.updatedAt) {
-            handleEditUserFromModal({
-                first_name: name,
-                id: dataEditUser.id
-            })
-        }
-        toast.success('Update success')
-        handleClose()
+    const handleEditUser = async () => {
+        setLoading(true)
+        setTimeout(async () => {
+            let res = await putEditUser(email, username, dataEditUser.id);
+            if (res && res.errCode === 0) {
+                handleClose();
+                getAllUser();
+                toast.success(res.errMessage)
+                setLoading(false)
+            }
+        }, 1500);
 
     }
 
@@ -40,26 +45,43 @@ const ModalEditUser = (props) => {
             keyboard={false}
         >
             <Modal.Header closeButton>
-                <Modal.Title>EDIT USER</Modal.Title>
+                <Modal.Title>UPDATE USER</Modal.Title>
             </Modal.Header>
             <Modal.Body>
                 <Form>
                     <Form.Group className="mb-3" controlId="formGroupEmail">
-                        <Form.Label>Name</Form.Label>
+                        <Form.Label>Email</Form.Label>
                         <Form.Control
-                            onChange={(event) => setName(event.target.value)}
+                            onChange={(event) => setEmail(event.target.value)}
                             type="text"
-                            placeholder="Enter Name"
-                            value={name || ''}
+                            placeholder="Email"
+                            value={email}
+                            disabled
                         />
                     </Form.Group>
                     <Form.Group className="mb-3" controlId="formGroupPassword">
-                        <Form.Label>Job</Form.Label>
+                        <Form.Label>Password</Form.Label>
                         <Form.Control
-                            onChange={(event) => setJob(event.target.value)}
-                            type="text"
+                            onChange={(event) => setPassword(event.target.value)}
+                            type="password"
                             placeholder="Job"
-                            value={job}
+                            value={'******'}
+                            disabled
+                        />
+                    </Form.Group>
+
+                    <Form.Group className="mb-3" controlId="formGroupPassword">
+                        <Form.Label>Username</Form.Label>
+                        <Form.Control
+                            onChange={(event) => setUsername(event.target.value)}
+                            type="text"
+                            placeholder="Username"
+                            value={username}
+                            onKeyUp={event => {
+                                if (event.key === 'Enter') {
+                                    handleEditUser()
+                                }
+                            }}
                         />
                     </Form.Group>
                 </Form>
@@ -68,7 +90,9 @@ const ModalEditUser = (props) => {
                 <Button variant="secondary" onClick={handleClose}>
                     Close
                 </Button>
-                <Button variant="primary" onClick={() => handleEditUser()}>Save</Button>
+                <Button variant="primary" onClick={() => handleEditUser()}>
+                    {loading && <i className='fa-solid fa-circle-notch fa-spin'></i>}  Save
+                </Button>
             </Modal.Footer>
         </Modal>
     )

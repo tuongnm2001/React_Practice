@@ -1,19 +1,19 @@
 import axios from './customize-axios'
 
-const fetchAllUser = (page) => {
-    return axios.get(`api/users?page=${page}`)
+const fetchAllUser = () => {
+    return axios.get(`/users/all`)
 }
 
-const postCreateNewUser = (name, job) => {
-    return axios.post(`/api/users`, { name, job })
+const postCreateNewUser = (email, password, username) => {
+    return axios.post(`/users/create`, { email, password, username })
 }
 
-const putEditUser = (page, name, job) => {
-    return axios.put(`/api/users/${page}`, { name, job })
+const putEditUser = (email, username, id) => {
+    return axios.put(`/api/edit-user`, { email, username, id })
 }
 
 const deleteUser = (id) => {
-    return axios.delete(`/api/users/${id}`)
+    return axios.post(`/users/delete/${id}`)
 }
 
 const loginApi = (email, password) => {

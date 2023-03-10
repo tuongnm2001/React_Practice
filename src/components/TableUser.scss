@@ -13,3 +13,22 @@
           padding  : 0 4px;
       }
   }
+
+  .arrow {
+      cursor  : pointer;
+
+      &:hover {
+          color  : rgb(160, 159, 159);
+      }
+  }
+
+  .spiner {
+      font-size    : 40px;
+      color        : #d2c8c8;
+      margin-left  : 550px;
+      margin-top   : 145px;
+  }
+
+  .paginate {
+      cursor  : pointer;
+  }

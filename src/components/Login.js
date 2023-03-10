@@ -16,14 +16,10 @@ const Login = () => {
     const passwordRef = useRef()
 
     const handleLogin = async () => {
-        if (!email || !password) {
-            toast.error('Email/Password is required!')
-            return;
-        }
         setLoadingApi(true)
 
         let res = await loginApi(email.trim(), password)
-        if (res && res.token) {
+        if (res && res.errCode === 0) {
             loginContext(email, res.token)
             navigate('/')
             toast.success('Login success!')
@@ -81,12 +77,13 @@ const Login = () => {
                 disabled={email && password ? false : true}
                 onClick={() => handleLogin()}
             >
-                Login {loadingApi && <i className='fa-solid fa-circle-notch fa-spin'></i>}
+                {loadingApi && <i className='fa-solid fa-circle-notch fa-spin'></i>} Login
             </button>
-            <div className='goBack'>
-                <i className='fa-solid fa-angles-left'></i>
-                <span onClick={() => handleGoBack()}>&nbsp;Go Back</span>
-            </div>
+
+            <span onClick={() => handleGoBack()} className='goBack'>&nbsp;
+                <i className='fa-solid fa-angles-left'></i> Go Back
+            </span>
+
         </div>
     )
 }

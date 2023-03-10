@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import Table from 'react-bootstrap/Table';
 import ReactPaginate from 'react-paginate';
 import './TableUser.scss'
@@ -7,29 +7,64 @@ import { CSVLink, CSVDownload } from "react-csv";
 import Papa from 'papaparse';
 import { toast } from 'react-toastify';
 import ModalAddNewUser from './ModalAddNewUser';
-
+import Login from './Login';
+import { fetchAllUser } from '../services/UserService';
+import { UserContext } from '../context/UserContext';
+import ModalEditUser from './ModalEditUser'
+import ModalDelUser from './ModalDelUser';
+import { HiArrowsUpDown } from 'react-icons/hi2';
+import Pagination from './Pagination/Pagination';
+import { paginate } from './Pagination/paginate';
 
 const TableUsers = (props) => {
+    const { user, loginContext } = useContext(UserContext)
 
-    const { listUser, setListUser, totalPages, getAllUser } = props
+    const [listUser, setListUser] = useState({})
 
-    const [sortBy, setSortBy] = useState('asc')
-    const [sortFiled, setSortField] = useState('id')
     const [dataExport, setDataExport] = useState([])
     const [showModalAddUser, setShowModalAddUser] = useState(false)
+    const [sortUpDown, setSortUpDown] = useState(false);
+    const [loading, setLoading] = useState(false)
+    const [showModalEditUser, setShowModalEditUser] = useState(false)
+    const [showModalDelUser, setShowModalDelUser] = useState(false)
+    const [dataEditUser, setDataEditUser] = useState({})
+    const [dataDelUser, setDataDelUser] = useState({})
+    const [currentPage, setCurrentPage] = useState(1)
+    const pageSize = 6;
+
+    useEffect(() => {
+        getAllUser();
+    }, [])
+
+    const getAllUser = async () => {
+        setLoading(false)
+        let res = await fetchAllUser();
+        if (res && res.length > 0) {
+            setListUser(res)
+        }
+        setLoading(true)
+    }
+
+    const handleShowModalEditUser = (user) => {
+        setShowModalEditUser(true)
+        setDataEditUser(user);
+    }
+
+    const handleShowDelUser = (user) => {
+        setShowModalDelUser(true)
+        setDataDelUser(user);
+    }
+
+    const handleDeleteUserFromModal = (user) => {
+        let cloneListUser = _.cloneDeep(listUser);
+        cloneListUser = cloneListUser.filter(item => item.id !== user.id)
+        setListUser(cloneListUser)
+    }
 
     const handlePageClick = (event) => {
         getAllUser(+event.selected + 1)
     }
 
-    const handleSort = (sortBy, sortFiled) => {
-        setSortBy(sortBy)
-        setSortField(sortFiled)
-
-        let cloneListUser = _.cloneDeep(listUser)
-        cloneListUser = _.orderBy(cloneListUser, [sortFiled], [sortBy])
-        setListUser(cloneListUser)
-    }
 
     const handleSearch = debounce((event) => {
         let tern = event.target.value
@@ -38,7 +73,7 @@ const TableUsers = (props) => {
             cloneListUser = cloneListUser.filter(item => item.email.includes(tern))
             setListUser(cloneListUser);
         } else {
-            getAllUser(1);
+            getAllUser();
         }
     }, 300)
 
@@ -94,14 +129,13 @@ const TableUsers = (props) => {
         let result = [];
         if (listUser && listUser.length > 0) {
             //header
-            result.push(['id', 'Email', 'FirstName', 'LastName'])
+            result.push(['id', 'email', 'username'])
             //body
             listUser.map((item, index) => {
                 let arr = [];
                 arr[0] = item.id
                 arr[1] = item.email
-                arr[2] = item.first_name
-                arr[3] = item.last_name
+                arr[2] = item.username
                 result.push(arr);
             })
             setDataExport(result);
@@ -113,10 +147,40 @@ const TableUsers = (props) => {
         setShowModalAddUser(true)
     }
 
-    const handleSubmitUser = (user) => {
-        setListUser([user, ...listUser])
-        console.log('check user : ', user);
+
+    const handleSortEmail = () => {
+        const sortEmailUp = _.orderBy(listUser, ['email'], ['asc'])
+        const sortEmailDown = _.orderBy(listUser, ['email'], ['desc'])
+        setSortUpDown(!sortUpDown)
+
+
+        if (sortUpDown === true) {
+            setListUser(sortEmailDown)
+        }
+        if (sortUpDown === false) {
+            setListUser(sortEmailUp)
+        }
     }
+
+    const handleSortUsername = () => {
+        const sortUsernameUp = _.orderBy(listUser, ['username'], ['asc'])
+        const sortUsernameDown = _.orderBy(listUser, ['username'], ['desc'])
+        setSortUpDown(!sortUpDown)
+
+
+        if (sortUpDown === true) {
+            setListUser(sortUsernameDown)
+        }
+        if (sortUpDown === false) {
+            setListUser(sortUsernameUp)
+        }
+    }
+
+    const handlePageChange = (page) => {
+        setCurrentPage(page)
+    }
+
+    const paginateListUser = paginate(listUser, currentPage, pageSize);
 
     return (
         <>
@@ -130,6 +194,14 @@ const TableUsers = (props) => {
             </div>
 
             <div className='btn-add-import'>
+
+                <button
+                    className='btn-add btn btn-success mx-3'
+                    onClick={() => handleAddNewUser()}
+                >
+                    <i className='fa-solid fa-circle-plus'></i> Add New User
+                </button>
+
                 <label className='btn-import' htmlFor='test'><i className='fa-solid fa-file-import'></i> Import</label>
                 <input
                     type={'file'}
@@ -147,119 +219,90 @@ const TableUsers = (props) => {
                 >
                     <i className='fa-solid fa-file-arrow-down'></i> Export
                 </CSVLink>
-
-                <button
-                    className='btn-add btn btn-success'
-                    onClick={() => handleAddNewUser()}
-                >
-                    <i className='fa-solid fa-circle-plus'></i> Add New User
-                </button>
             </div>
 
             <div className='table'>
                 <Table striped bordered hover>
                     <thead>
                         <tr>
-                            <th>
-                                <div className='sort-header'>
-                                    <span>ID</span>
-                                    <span>
-                                        <i
-                                            onClick={() => handleSort('desc', 'id')}
-                                            className="fas fa-arrow-up">
-                                        </i>
-
-                                        <i
-                                            onClick={() => handleSort('asc', 'id')}
-                                            className="fas fa-arrow-down">
-                                        </i>
-                                    </span>
-                                </div>
+                            <th>ID</th>
+                            <th >
+                                Email <HiArrowsUpDown className='arrow' onClick={() => handleSortEmail()} />
                             </th>
-
-                            <th>Email</th>
-
+                            <th>Password</th>
                             <th>
-                                <div className='sort-header'>
-                                    <span>First Name</span>
-                                    <span>
-
-                                        <i
-                                            onClick={() => handleSort('desc', 'first_name')}
-                                            className="fas fa-arrow-up">
-
-                                        </i>
-
-                                        <i
-                                            onClick={() => handleSort('asc', 'first_name')}
-                                            className="fas fa-arrow-down">
-
-                                        </i>
-
-
-                                    </span>
-                                </div>
+                                Username <HiArrowsUpDown className='arrow' onClick={() => handleSortUsername()} />
                             </th>
-
-                            <th>Last Name</th>
+                            <th>Actions</th>
                         </tr>
                     </thead>
                     <tbody>
 
                         {
-                            listUser &&
-                            listUser.map((item, index) => {
+                            paginateListUser && paginateListUser.length > 0 &&
+                            paginateListUser.map((item, index) => {
                                 return (
                                     <tr key={`user-${index}`}>
                                         <td>{item.id}</td>
                                         <td>{item.email}</td>
-                                        <td>{item.first_name}</td>
-                                        <td>{item.last_name}</td>
+                                        <td>{'******'}</td>
+                                        <td>{item.username}</td>
                                         <td>
-                                            <button
-                                                className='btn btn-warning mx-3'
-                                                onClick={() => props.handleShowModalEditUser(item)}>
-                                                Edit
+                                            <button className='btn btn-warning mx-3' onClick={() => handleShowModalEditUser(item)}>
+                                                <i className="fas fa-user-edit"></i> Update
                                             </button>
-
-                                            <button className='btn btn-danger' onClick={() => props.handleShowDelUser(item)}>Delete</button>
+                                            <button className='btn btn-danger' onClick={() => handleShowDelUser(item)}>
+                                                <i className="fas fa-user-times"></i> Delete
+                                            </button>
                                         </td>
                                     </tr>
                                 )
                             })
                         }
+
                     </tbody>
                 </Table>
+            </div>
+
+            {
+                loading === false &&
+                <i className="fas fa-spinner fa-pulse spiner"></i>
+            }
+
+            <div className='paginate'>
+                {
+                    loading &&
+                    <Pagination
+                        items={listUser.length}
+                        currentPage={currentPage}
+                        pageSize={pageSize}
+                        onPageChange={handlePageChange}
+                    />
+                }
             </div>
 
             <ModalAddNewUser
                 showModalAddUser={showModalAddUser}
                 setShowModalAddUser={setShowModalAddUser}
                 getAllUser={getAllUser}
-                handleSubmitUser={handleSubmitUser}
             />
 
-            <div className='paginate'>
-                <ReactPaginate
-                    breakLabel="..."
-                    nextLabel="Next >>"
-                    onPageChange={handlePageClick}
-                    pageRangeDisplayed={5}
-                    pageCount={totalPages}
-                    previousLabel="<< Previous"
+            <ModalEditUser
+                showModalEditUser={showModalEditUser}
+                setShowModalEditUser={setShowModalEditUser}
+                dataEditUser={dataEditUser}
+                handleShowModalEditUser={handleShowModalEditUser}
+                getAllUser={getAllUser}
+            />
 
-                    pageClassName='page-item'
-                    pageLinkClassName='page-link'
-                    previousClassName='page-item'
-                    previousLinkClassName='page-link'
-                    nextClassName='page-item'
-                    nextLinkClassName='page-link'
-                    breakClassName='page-item'
-                    breakLinkClassName='page-link'
-                    containerClassName='pagination'
-                    activeClassName='active'
-                />
-            </div>
+            <ModalDelUser
+                showModalDelUser={showModalDelUser}
+                setShowModalDelUser={setShowModalDelUser}
+                dataDelUser={dataDelUser}
+                handleDeleteUserFromModal={handleDeleteUserFromModal}
+                getAllUser={getAllUser}
+
+            />
         </>
     )
 }

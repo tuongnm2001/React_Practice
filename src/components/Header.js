@@ -14,11 +14,11 @@ const Header = () => {
     const navigate = useNavigate()
     const [hideHeader, setHideHeader] = useState(false)
 
-    // useEffect(() => {
-    //     if (window.locationbar.pathname === '/login') {
-    //         setHideHeader(true)
-    //     }
-    // }, [])
+    useEffect(() => {
+        if (window.locationbar.pathname === '/login') {
+            setHideHeader(true)
+        }
+    }, [])
 
     const handleLogout = () => {
         logout();

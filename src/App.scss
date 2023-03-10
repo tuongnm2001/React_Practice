@@ -76,4 +76,12 @@ code {
       }
     }
   }
+
+  .goToLogin {
+    cursor  : pointer;
+
+    &:hover {
+      color  : rgb(235, 198, 33);
+    }
+  }
 }
