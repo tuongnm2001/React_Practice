@@ -20,14 +20,13 @@ const Login = () => {
 
         let res = await loginApi(email.trim(), password)
         if (res && res.errCode === 0) {
-            loginContext(email, res.token)
+            loginContext(email)
             navigate('/')
             toast.success('Login success!')
+        } else if (res.errCode === 1) {
+            toast(res.massage)
         } else {
-            //error
-            if (res && res.status === 400) {
-                toast.error(res.data.error)
-            }
+            toast(res.massage)
         }
         setLoadingApi(false)
     }

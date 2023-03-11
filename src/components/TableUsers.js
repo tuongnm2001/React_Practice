@@ -61,10 +61,6 @@ const TableUsers = (props) => {
         setListUser(cloneListUser)
     }
 
-    const handlePageClick = (event) => {
-        getAllUser(+event.selected + 1)
-    }
-
 
     const handleSearch = debounce((event) => {
         let tern = event.target.value
@@ -196,7 +192,7 @@ const TableUsers = (props) => {
             <div className='btn-add-import'>
 
                 <button
-                    className='btn-add btn btn-success mx-3'
+                    className='btn-add btn btn-success'
                     onClick={() => handleAddNewUser()}
                 >
                     <i className='fa-solid fa-circle-plus'></i> Add New User
@@ -281,11 +277,13 @@ const TableUsers = (props) => {
                 }
             </div>
 
-            <ModalAddNewUser
-                showModalAddUser={showModalAddUser}
-                setShowModalAddUser={setShowModalAddUser}
-                getAllUser={getAllUser}
-            />
+            <div className='modal-addUser'>
+                <ModalAddNewUser
+                    showModalAddUser={showModalAddUser}
+                    setShowModalAddUser={setShowModalAddUser}
+                    getAllUser={getAllUser}
+                />
+            </div>
 
             <ModalEditUser
                 showModalEditUser={showModalEditUser}

@@ -11,8 +11,6 @@ const Pagination = (props) => {
 
     const totalPages = Math.ceil(items / pageSize)
 
-    console.log('checkkk : ', items, pageSize, currentPage);
-
     const handlePrevPage = () => {
         onPageChange(currentPage - 1)
     }

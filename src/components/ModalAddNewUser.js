@@ -11,6 +11,9 @@ const ModalAddNewUser = (props) => {
     const [password, setPassword] = useState('')
     const [username, setUsername] = useState('')
     const [loading, setLoading] = useState(false)
+    const [errorEmail, setErrorEmail] = useState(false)
+    const [errorPassword, setErrorPassword] = useState(false)
+    const [errorUsername, setErrorUsername] = useState(false)
     const passRef = useRef()
     const userRef = useRef()
 
@@ -27,10 +30,46 @@ const ModalAddNewUser = (props) => {
                 getAllUser();
                 toast.success(data.message)
                 setLoading(false)
+                setEmail('')
+                setPassword('')
+                setUsername('')
+            } else if (data.errCode === 1) {
+                toast.error(data.message)
+                setErrorEmail(true)
+                setLoading(false)
+            } else if (data.errCode === 2) {
+                toast.error(data.message)
+                setErrorPassword(true)
+                setLoading(false)
+            } else if (data.errCode === 3) {
+                toast.error(data.message)
+                setErrorUsername(true)
+                setLoading(false)
+            } else if (data.errCode === -1) {
+                toast.error(data.message)
+                setErrorEmail(true)
+                setLoading(false)
             } else {
-                toast.error('Create user faild')
+                toast.error(data.message)
+                setErrorPassword(true)
+                setLoading(false)
             }
         }, 1500)
+    }
+
+    const handleEmail = (event) => {
+        setEmail(event.target.value)
+        setErrorEmail(false)
+    }
+
+    const handlePassword = (event) => {
+        setPassword(event.target.value)
+        setErrorPassword(false)
+    }
+
+    const handleUsername = (event) => {
+        setUsername(event.target.value)
+        setErrorUsername(false)
     }
 
     return (
@@ -43,12 +82,13 @@ const ModalAddNewUser = (props) => {
             <Modal.Header closeButton>
                 <Modal.Title>ADD NEW USER</Modal.Title>
             </Modal.Header>
-            <Modal.Body>
+            <Modal.Body >
                 <Form>
                     <Form.Group className="mb-3" >
                         <Form.Label>Email</Form.Label>
                         <Form.Control
-                            onChange={(event) => setEmail(event.target.value)}
+                            isInvalid={errorEmail}
+                            onChange={(event) => handleEmail(event)}
                             type="email"
                             placeholder="Email"
                             value={email}
@@ -62,7 +102,8 @@ const ModalAddNewUser = (props) => {
                     <Form.Group className="mb-3" >
                         <Form.Label>Passowrd</Form.Label>
                         <Form.Control
-                            onChange={(event) => setPassword(event.target.value)}
+                            isInvalid={errorPassword}
+                            onChange={(event) => handlePassword(event)}
                             type="password"
                             placeholder="Password"
                             value={password}
@@ -78,7 +119,8 @@ const ModalAddNewUser = (props) => {
                     <Form.Group className="mb-3" controlId="formGroupPassword">
                         <Form.Label>Username</Form.Label>
                         <Form.Control
-                            onChange={(event) => setUsername(event.target.value)}
+                            isInvalid={errorUsername}
+                            onChange={(event) => handleUsername(event)}
                             type="text"
                             placeholder="Username"
                             value={username}
